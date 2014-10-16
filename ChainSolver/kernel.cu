@@ -3,6 +3,7 @@
 #include "device_launch_parameters.h"
 
 #include <stdio.h>
+#include <csr_matrix.h>
 
 int main()
 {
