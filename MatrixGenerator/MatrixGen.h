@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 using namespace std;
 
 // Вспомогательная структура CSR матрицы
@@ -123,6 +124,8 @@ public:
 public:
 	MatrixCOO			GetMatrix();
 	MatrixCOO			GetLastMatrix();
+	void				WriteMatrixMarketFile_LastMatrix(const string&);
+	void				WriteMatrixMarketFile_LastVector(const string&);
 
 private:
 	int					CreateCSR();

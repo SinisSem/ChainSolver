@@ -24,8 +24,8 @@ int CMatrixGen::CreateCSR()
 		return 2;								// Базовая проводимость не может быть == 0
 	if (m_BaseMainDiagonalAddition == 0)
 		return 3;								// Базовая добавка для диагонали не может быть == 0
-	if (m_RandomNetAdmittancesNumber < m_ChainNodesNumber.size() - 1)
-		return 4;								// Число случайных связей - хотя бы == числу цепочек - 1
+//	if (m_RandomNetAdmittancesNumber < m_ChainNodesNumber.size() - 1)
+//		return 4;								// Число случайных связей - хотя бы == числу цепочек - 1
 	for (int idx = 0; idx < m_ChainNodesNumber.size(); idx++)
 	{
 		if (m_ChainNodesNumber[idx] < 2)
@@ -57,6 +57,35 @@ int CMatrixGen::CreateCSR()
 		}
 	}
 
+	// Добавим случайные связи
+	vector<int> NodesIn = RandomVectorInsert(m_NodesNumber, m_RandomNetAdmittancesNumber);
+	vector<int> NodesTo = RandomVectorInsert(m_NodesNumber, m_RandomNetAdmittancesNumber);
+
+	for (int insertIdx = 0; insertIdx < NodesTo.size(); insertIdx++)
+	{
+		double AddAdmittance = GetRandomAdmittance();
+		for (int elementIdx = 0; elementIdx < m_LastMatrix.val.size(); elementIdx++)
+		{
+			if (m_LastMatrix.row_idx[elementIdx] == m_LastMatrix.col_idx[elementIdx] &&
+				m_LastMatrix.row_idx[elementIdx] == NodesIn[insertIdx])
+			{
+				m_LastMatrix.val[elementIdx] -= AddAdmittance;
+				m_LastMatrix.AddElementInto(AddAdmittance, NodesIn[insertIdx], NodesTo[insertIdx]);
+				break;
+			}
+		}
+		for (int elementIdx = 0; elementIdx < m_LastMatrix.val.size(); elementIdx++)
+		{
+			if (m_LastMatrix.row_idx[elementIdx] == m_LastMatrix.col_idx[elementIdx] &&
+				m_LastMatrix.row_idx[elementIdx] == NodesTo[insertIdx])
+			{
+				m_LastMatrix.val[elementIdx] -= AddAdmittance;
+				m_LastMatrix.AddElementInto(AddAdmittance, NodesTo[insertIdx], NodesIn[insertIdx]);
+				break;
+			}
+		}
+	}
+
 	// Добавим проводимости шунта
 	vector<int> WhereAdd = RandomVectorInsert(m_NodesNumber, m_NodesNumber * m_AdditionsNumber);
 	
@@ -68,7 +97,7 @@ int CMatrixGen::CreateCSR()
 				m_LastMatrix.row_idx[elementIdx] == WhereAdd[addIdx])
 			{
 				double AddAdmittance = RandomDouble(m_BaseMainDiagonalAddition, m_AdditionDispersion);
-				m_LastMatrix.val[elementIdx] += AddAdmittance;
+				m_LastMatrix.val[elementIdx] -= AddAdmittance;
 				break;
 			}
 		}
@@ -87,7 +116,7 @@ int CMatrixGen::CreateCSR()
 				m_LastMatrix.row_idx[elementIdx] == WhereEDS[addIdx])
 			{
 				double AddAdmittance = RandomDouble(m_EDSAdmittanceBase, m_EDSAdmittanceDispersion);
-				m_LastMatrix.val[elementIdx] += AddAdmittance;
+				m_LastMatrix.val[elementIdx] -= AddAdmittance;
 				double EDSValue = RandomDouble(m_EDSBase, m_EDSDispersion);
 				m_LastVector[WhereEDS[addIdx]] = EDSValue * AddAdmittance;
 				break;
@@ -155,86 +184,88 @@ void CMatrixGen::CreateChains()
 	}
 
 	// 2. Накидаем в цепь связей, обеспечивающих связность сети в целом
-	for (int chainIdx = 1; chainIdx < m_Chains.size(); chainIdx++)
-	{
-		// У каждой цепи должна быть хотябы одна связь
-		int NewLink = RandomInt(0, chainIdx - 1);		// Выбрать нужно цепь, из тех, что уже в связной области
-		// Случайно выберем откуда и куда придут связи внутри заданных цепей NewLink и chainIdx
-		int NodeFrom = RandomInt(m_Chains[chainIdx].StartNode, m_Chains[chainIdx].StartNode + m_Chains[chainIdx].NodesNumber - 1);
-		int NodeTo = RandomInt(m_Chains[NewLink].StartNode, m_Chains[NewLink].StartNode + m_Chains[NewLink].NodesNumber - 1);
+	//for (int chainIdx = 1; chainIdx < m_Chains.size(); chainIdx++)
+	//{
+	//	// У каждой цепи должна быть хотябы одна связь
+	//	int NewLink = RandomInt(0, chainIdx - 1);		// Выбрать нужно цепь, из тех, что уже в связной области
+	//	// Случайно выберем откуда и куда придут связи внутри заданных цепей NewLink и chainIdx
+	//	int NodeFrom = RandomInt(m_Chains[chainIdx].StartNode, m_Chains[chainIdx].StartNode + m_Chains[chainIdx].NodesNumber - 1);
+	//	int NodeTo = RandomInt(m_Chains[NewLink].StartNode, m_Chains[NewLink].StartNode + m_Chains[NewLink].NodesNumber - 1);
 
-		double NewLinkAdmittance = GetRandomAdmittance();
+	//	double NewLinkAdmittance = GetRandomAdmittance();
 
-		for (int elementIdx = 0; elementIdx < m_Chains[chainIdx].ChainMatrix.row_idx.size(); elementIdx++)
-		{
-			int elementCol = m_Chains[chainIdx].ChainMatrix.col_idx[elementIdx];
-			int elementRow = m_Chains[chainIdx].ChainMatrix.row_idx[elementIdx];
+	//	for (int elementIdx = 0; elementIdx < m_Chains[chainIdx].ChainMatrix.row_idx.size(); elementIdx++)
+	//	{
+	//		int elementCol = m_Chains[chainIdx].ChainMatrix.col_idx[elementIdx];
+	//		int elementRow = m_Chains[chainIdx].ChainMatrix.row_idx[elementIdx];
 
-			if (elementRow == NodeFrom	&&
-				elementRow == elementCol)
-			{
-				m_Chains[chainIdx].ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
-				m_Chains[chainIdx].ChainMatrix.AddElementInto(NewLinkAdmittance, NodeFrom, NodeTo);
-				break;
-			}
-		}
+	//		if (elementRow == NodeFrom	&&
+	//			elementRow == elementCol)
+	//		{
+	//			m_Chains[chainIdx].ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
+	//			m_Chains[chainIdx].ChainMatrix.AddElementInto(NewLinkAdmittance, NodeFrom, NodeTo);
+	//			break;
+	//		}
+	//	}
 
-		for (int elementIdx = 0; elementIdx < m_Chains[NewLink].ChainMatrix.row_idx.size(); elementIdx++)
-		{
-			int elementCol = m_Chains[NewLink].ChainMatrix.col_idx[elementIdx];
-			int elementRow = m_Chains[NewLink].ChainMatrix.row_idx[elementIdx];
+	//	for (int elementIdx = 0; elementIdx < m_Chains[NewLink].ChainMatrix.row_idx.size(); elementIdx++)
+	//	{
+	//		int elementCol = m_Chains[NewLink].ChainMatrix.col_idx[elementIdx];
+	//		int elementRow = m_Chains[NewLink].ChainMatrix.row_idx[elementIdx];
 
-			if (elementRow == NodeTo	&&
-				elementRow == elementCol)
-			{
-				m_Chains[NewLink].ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
-				m_Chains[NewLink].ChainMatrix.AddElementInto(NewLinkAdmittance, NodeTo, NodeFrom);
-				break;
-			}
-		}
-		m_RandomNetAdmittancesLeft--;
-	}
+	//		if (elementRow == NodeTo	&&
+	//			elementRow == elementCol)
+	//		{
+	//			m_Chains[NewLink].ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
+	//			m_Chains[NewLink].ChainMatrix.AddElementInto(NewLinkAdmittance, NodeTo, NodeFrom);
+	//			break;
+	//		}
+	//	}
+	//	m_RandomNetAdmittancesLeft--;
+	//}
+
 	// 3. Случайно раскидаем оставшиеся связи (добавка не проверяет, были ли там уже связи)
-	while (m_RandomNetAdmittancesLeft > 0)
-	{
-		int ChainFrom = RandomInt(0, m_Chains.size());
-		int ChainTo = RandomInt(0, m_Chains.size());
 
-		Chain* ChainFromPtr = &(m_Chains[ChainFrom]);
-		Chain* ChainToPtr = &(m_Chains[ChainTo]);
-		int NodeFrom = RandomInt(ChainFromPtr->StartNode, ChainFromPtr->StartNode + ChainFromPtr->NodesNumber - 1);
-		int NodeTo = RandomInt(ChainToPtr->StartNode, ChainToPtr->StartNode + ChainToPtr->NodesNumber - 1);
+	//while (m_RandomNetAdmittancesLeft > 0)
+	//{
+	//	int ChainFrom = RandomInt(0, m_Chains.size());
+	//	int ChainTo = RandomInt(0, m_Chains.size());
 
-		double NewLinkAdmittance = GetRandomAdmittance();
+	//	Chain* ChainFromPtr = &(m_Chains[ChainFrom]);
+	//	Chain* ChainToPtr = &(m_Chains[ChainTo]);
+	//	int NodeFrom = RandomInt(ChainFromPtr->StartNode, ChainFromPtr->StartNode + ChainFromPtr->NodesNumber - 1);
+	//	int NodeTo = RandomInt(ChainToPtr->StartNode, ChainToPtr->StartNode + ChainToPtr->NodesNumber - 1);
 
-		for (int elementIdx = 0; elementIdx < ChainFromPtr->ChainMatrix.row_idx.size(); elementIdx++)
-		{
-			int elementCol = ChainFromPtr->ChainMatrix.col_idx[elementIdx];
-			int elementRow = ChainFromPtr->ChainMatrix.row_idx[elementIdx];
+	//	double NewLinkAdmittance = GetRandomAdmittance();
 
-			if (elementRow == NodeFrom	&&
-				elementRow == elementCol)
-			{
-				ChainFromPtr->ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
-				ChainFromPtr->ChainMatrix.AddElementInto(NewLinkAdmittance, NodeFrom, NodeTo);
-				break;
-			}
-		}
-		for (int elementIdx = 0; elementIdx < ChainToPtr->ChainMatrix.row_idx.size(); elementIdx++)
-		{
-			int elementCol = ChainToPtr->ChainMatrix.col_idx[elementIdx];
-			int elementRow = ChainToPtr->ChainMatrix.row_idx[elementIdx];
+	//	for (int elementIdx = 0; elementIdx < ChainFromPtr->ChainMatrix.row_idx.size(); elementIdx++)
+	//	{
+	//		int elementCol = ChainFromPtr->ChainMatrix.col_idx[elementIdx];
+	//		int elementRow = ChainFromPtr->ChainMatrix.row_idx[elementIdx];
 
-			if (elementRow == NodeTo	&&
-				elementRow == elementCol)
-			{
-				ChainToPtr->ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
-				ChainToPtr->ChainMatrix.AddElementInto(NewLinkAdmittance, NodeTo, NodeFrom);
-				break;
-			}
-		}
-		m_RandomNetAdmittancesLeft--;
-	}
+	//		if (elementRow == NodeFrom	&&
+	//			elementRow == elementCol)
+	//		{
+	//			ChainFromPtr->ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
+	//			ChainFromPtr->ChainMatrix.AddElementInto(NewLinkAdmittance, NodeFrom, NodeTo);
+	//			break;
+	//		}
+	//	}
+	//	for (int elementIdx = 0; elementIdx < ChainToPtr->ChainMatrix.row_idx.size(); elementIdx++)
+	//	{
+	//		int elementCol = ChainToPtr->ChainMatrix.col_idx[elementIdx];
+	//		int elementRow = ChainToPtr->ChainMatrix.row_idx[elementIdx];
+
+	//		if (elementRow == NodeTo	&&
+	//			elementRow == elementCol)
+	//		{
+	//			ChainToPtr->ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
+	//			ChainToPtr->ChainMatrix.AddElementInto(NewLinkAdmittance, NodeTo, NodeFrom);
+	//			break;
+	//		}
+	//	}
+	//	m_RandomNetAdmittancesLeft--;
+	//}
 }
 
 double CMatrixGen::GetRandomAdmittance()
@@ -285,4 +316,52 @@ vector<int> CMatrixGen::RandomVectorInsert(int iVectorSize, int iElementsNumber)
 	}
 	
 	return oRes;
+}
+
+#include <fstream>
+
+void CMatrixGen::WriteMatrixMarketFile_LastMatrix(const string& filename)
+{
+	std::ofstream output(filename.c_str());
+
+	if (!output)
+		return;
+
+	output.scientific;
+	output.precision(10);
+	output << "%%MatrixMarket matrix coordinate real general\n";
+
+	// Rows - Cols - Entires
+	output << "\t" << m_NodesNumber << "\t" << m_NodesNumber << "\t" << m_LastMatrix.val.size() << "\n";
+
+	for (int i = 0; i < m_LastMatrix.val.size(); i++)
+	{
+		output << (m_LastMatrix.row_idx[i] + 1) << " ";
+		output << (m_LastMatrix.col_idx[i] + 1) << " ";
+		output << (m_LastMatrix.val[i]);
+		output << "\n";
+	}
+}
+
+void CMatrixGen::WriteMatrixMarketFile_LastVector(const string& filename)
+{
+	std::ofstream output(filename.c_str());
+
+	if (!output)
+		return;
+
+	output.scientific;
+	output.precision(10);
+	output << "%%MatrixMarket matrix coordinate real general\n";
+
+	// Rows - Cols - Entires
+	output << "\t" << m_NodesNumber << "\t" << 1 << "\t" << m_NodesNumber << "\n";
+
+	for (int i = 0; i < m_LastVector.size(); i++)
+	{
+		output << (i + 1) << " ";
+		output << (1) << " ";
+		output << (m_LastVector[i]);
+		output << "\n";
+	}
 }
