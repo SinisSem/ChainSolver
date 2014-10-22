@@ -3,18 +3,21 @@
 #include <string>
 using namespace std;
 
-// Вспомогательная структура COO матрицы
-struct MatrixCOO
+namespace RandomChainMatrixGenerator
 {
-	vector<double>	val;								// Вектор значений матрицы
-	vector<int>		row_idx;							// Вектор индексов строк матрицы (первый уровень сортировки должен быть выполнен)
-	vector<int>		col_idx;							// Вектор индексов столбцов матрицы (второй уровень сортировки должен быть выполнен)
-	void			ClearMatrix();						// Удалить значения всех векторов
-	int				GetRows();							// Число рядов матрицы
-	int				GetCols();							// Число столбцов матрицы
-	int				AddElementInto(double , int , int);	// Добавить элемент с учетом сортировки
-	void			AddElement(double, int, int);		// Добавить элемент без учета сортировки
-	void			WriteMatrixMarketFile(const string);// Записать матрицу в файл согласно формату matrix market
-														// Подробная информация по формату на сайте:
-														// http://math.nist.gov/MatrixMarket/formats.html
-};
+	// Вспомогательная структура COO матрицы
+	struct MatrixCOO
+	{
+		vector<double>	val;								// Вектор значений матрицы
+		vector<int>		row_idx;							// Вектор индексов строк матрицы (первый уровень сортировки должен быть выполнен)
+		vector<int>		col_idx;							// Вектор индексов столбцов матрицы (второй уровень сортировки должен быть выполнен)
+		void			ClearMatrix();						// Удалить значения всех векторов
+		int				GetRows();							// Число рядов матрицы
+		int				GetCols();							// Число столбцов матрицы
+		int				AddElementInto(double, int, int);	// Добавить элемент с учетом сортировки
+		void			AddElement(double, int, int);		// Добавить элемент без учета сортировки
+		void			WriteMatrixMarketFile(const string);// Записать матрицу в файл согласно формату matrix market
+		// Подробная информация по формату на сайте:
+		// http://math.nist.gov/MatrixMarket/formats.html
+	};
+}

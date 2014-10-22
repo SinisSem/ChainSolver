@@ -1,5 +1,6 @@
 #include "MatrixCOO.h"
 #include <fstream>
+using namespace RandomChainMatrixGenerator;
 
 void
 MatrixCOO::ClearMatrix()

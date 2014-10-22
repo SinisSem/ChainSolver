@@ -3,6 +3,7 @@
 
 #include "MatrixGen.h"
 #include <ctime>
+using namespace RandomChainMatrixGenerator;
 
 
 int main()

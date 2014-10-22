@@ -7,7 +7,7 @@
 #include <cusp/io/matrix_market.h>
 #include <cusp/krylov/gmres.h>
 #include <cusp/monitor.h>
-///#include "../MatrixGenerator/MatrixGen.h"
+#include "../MatrixGenerator/MatrixGen.h"
 
 //__global__ void crpcrKernel(float *d_a,
 //	float *d_b,

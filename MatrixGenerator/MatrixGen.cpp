@@ -3,6 +3,7 @@
 #include <ctime>
 #include <algorithm>
 #include <numeric>
+using namespace RandomChainMatrixGenerator;
 
 CMatrixGen::CMatrixGen()
 {

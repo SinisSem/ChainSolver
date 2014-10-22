@@ -1,4 +1,5 @@
 #include "Chain.h"
+using namespace RandomChainMatrixGenerator;
 
 void
 Chain::CopyChainMatrixToMainMatrix()
