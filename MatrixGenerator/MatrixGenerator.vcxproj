@@ -79,10 +79,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chain.h" />
+    <ClInclude Include="MatrixCOO.h" />
     <ClInclude Include="MatrixGen.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Chain.cpp" />
+    <ClCompile Include="MatrixCOO.cpp" />
     <ClCompile Include="MatrixGen.cpp" />
     <ClCompile Include="MatrixGenerator.cpp" />
   </ItemGroup>

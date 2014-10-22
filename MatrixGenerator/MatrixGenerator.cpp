@@ -28,7 +28,7 @@ int main()
 	A.m_AdditionDispersion = 1;
 	A.m_BaseAdmittance = 1;
 	A.m_BaseMainDiagonalAddition = 0.5;
-	A.m_RandomNetAdmittancesNumber = 300;
+	A.m_RandomNetAdmittancesNumber = 50;
 	A.m_AdditionsNumber = 0.3;
 	A.m_EDSAdmittanceBase = 1;
 	A.m_EDSAdmittanceDispersion = 0;
