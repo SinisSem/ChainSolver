@@ -246,49 +246,6 @@ void CMatrixGen::CreateChains()
 	//	}
 	//	m_RandomNetAdmittancesLeft--;
 	//}
-
-	// 3. Случайно раскидаем оставшиеся связи (добавка не проверяет, были ли там уже связи)
-
-	//while (m_RandomNetAdmittancesLeft > 0)
-	//{
-	//	int ChainFrom = RandomInt(0, m_Chains.size());
-	//	int ChainTo = RandomInt(0, m_Chains.size());
-
-	//	Chain* ChainFromPtr = &(m_Chains[ChainFrom]);
-	//	Chain* ChainToPtr = &(m_Chains[ChainTo]);
-	//	int NodeFrom = RandomInt(ChainFromPtr->StartNode, ChainFromPtr->StartNode + ChainFromPtr->NodesNumber - 1);
-	//	int NodeTo = RandomInt(ChainToPtr->StartNode, ChainToPtr->StartNode + ChainToPtr->NodesNumber - 1);
-
-	//	double NewLinkAdmittance = GetRandomAdmittance();
-
-	//	for (int elementIdx = 0; elementIdx < ChainFromPtr->ChainMatrix.row_idx.size(); elementIdx++)
-	//	{
-	//		int elementCol = ChainFromPtr->ChainMatrix.col_idx[elementIdx];
-	//		int elementRow = ChainFromPtr->ChainMatrix.row_idx[elementIdx];
-
-	//		if (elementRow == NodeFrom	&&
-	//			elementRow == elementCol)
-	//		{
-	//			ChainFromPtr->ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
-	//			ChainFromPtr->ChainMatrix.AddElementInto(NewLinkAdmittance, NodeFrom, NodeTo);
-	//			break;
-	//		}
-	//	}
-	//	for (int elementIdx = 0; elementIdx < ChainToPtr->ChainMatrix.row_idx.size(); elementIdx++)
-	//	{
-	//		int elementCol = ChainToPtr->ChainMatrix.col_idx[elementIdx];
-	//		int elementRow = ChainToPtr->ChainMatrix.row_idx[elementIdx];
-
-	//		if (elementRow == NodeTo	&&
-	//			elementRow == elementCol)
-	//		{
-	//			ChainToPtr->ChainMatrix.val[elementIdx] -= NewLinkAdmittance;
-	//			ChainToPtr->ChainMatrix.AddElementInto(NewLinkAdmittance, NodeTo, NodeFrom);
-	//			break;
-	//		}
-	//	}
-	//	m_RandomNetAdmittancesLeft--;
-	//}
 }
 
 double CMatrixGen::GetRandomAdmittance()
