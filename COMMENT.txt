@@ -9,6 +9,8 @@
                 http://www.math.tsu.ru/EEResources/pdf_common/Introduction_to_Parallel_Computations_L6(6).pdf
                 На английском интересные статьи:
                 http://developer.download.nvidia.com/compute/cuda/1.1-Beta/x86_website/projects/reduction/doc/reduction.pdf
+                http://www.jcohen.name/papers/Zhang_Fast_2009.pdf
+                http://conferences.computer.org/sc/2012/papers/1000a071.pdf
                 
                 Про то, как решать так называемые циклические задачи (кольца по нашему):
                 http://www.mathnet.ru/links/09f6ceff301d6dfeef0c8bec9912eeff/vsgtu740.pdf
