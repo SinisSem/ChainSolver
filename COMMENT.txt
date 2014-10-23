@@ -19,3 +19,6 @@
                 https://code.google.com/p/cudpp/
                 новые варианты тут:
                 http://cudpp.github.io/
+                В старых вариантах алгоритмы (в новых найти затруднительно):
+                https://code.google.com/p/cudpp/source/browse/#svn%2Fbranches%2Ftridiagonal%2Fcudpp%2Fsrc%2Fkernel
+                
