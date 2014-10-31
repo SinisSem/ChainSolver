@@ -21,10 +21,10 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixGen.h">
+    <ClInclude Include="Chain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Chain.h">
+    <ClInclude Include="MatrixGen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MatrixCOO.h">
@@ -38,10 +38,10 @@
     <ClCompile Include="MatrixGen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Chain.cpp">
+    <ClCompile Include="MatrixCOO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MatrixCOO.cpp">
+    <ClCompile Include="Chain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

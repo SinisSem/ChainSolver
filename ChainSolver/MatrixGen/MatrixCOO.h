@@ -8,6 +8,12 @@ using namespace std;
 
 namespace RandomChainMatrixGenerator
 {
+	struct TriDiagonal
+	{
+		vector<double> a;				// Верхняя диагональ
+		vector<double> b;				// Главная диагональ
+		vector<double> c;				// Нижняя диагональ
+	};
 	// Вспомогательная структура COO матрицы
 	struct MatrixCOO
 	{

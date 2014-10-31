@@ -156,6 +156,16 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMTask.h" />
+    <ClInclude Include="DefaultConfig.h" />
+    <ClInclude Include="MatrixGen\Chain.h" />
+    <ClInclude Include="MatrixGen\MatrixCOO.h" />
+    <ClInclude Include="MatrixGen\MatrixGen.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DefaultConfig.cpp" />
+    <ClCompile Include="MatrixGen\Chain.cpp" />
+    <ClCompile Include="MatrixGen\MatrixCOO.cpp" />
+    <ClCompile Include="MatrixGen\MatrixGen.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -33,7 +33,8 @@ namespace RandomChainMatrixGenerator
 		void			CopyChainMatrixToMainMatrix();	// Копирует содержимое матрицы цепочек в полную матрицу
 		void			AddEDS(double, double, int);	// Добавит ЭДС в цепочку
 		void			AddShunt(double, int);			// Добавит шунт в цепочку
-		int				AddLink(double, int, int);	// Добавит новую нецепную связь
+		int				AddLink(double, int, int);		// Добавит новую нецепную связь
+		TriDiagonal		GetChainMatrix();				// Выводит цепочечную матрицу в диагональном виде
 	};
 }
 
